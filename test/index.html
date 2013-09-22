@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Router</title>
+        <script type="text/javascript" src="../src/router.js"></script>
+    </head>
+    <body>
+        
+        <h1>Nevyk's router test page</h1>
+        
+        <button onclick="router.switchProvider();">Switch router provider</button>
+        
+        <h2>Go to:</h2>
+    
+        <button onclick="router.go('/');">/</button>
+        <button onclick="router.go('/page/hello');">page/hello</button>
+        <button onclick="router.go('/article/tutorial/13');">article/tutorial/13</button>
+        <button onclick="router.go('/any/home/go');">any/home/go</button>
+        <button onclick="router.go('/any/leave');">any/leave</button>
+        <button onclick="router.go('/optional/hello');">optional/hello</button>
+        <button onclick="router.go('/optional');">optional</button>
+        <button onclick="router.go('/user/3');">user/3</button>
+        <button onclick="router.go('/user/1');">user/1</button>
+        <button onclick="router.go('/failure');">failure</button>
+        
+        <h2 id="result"></h2>
+        
+        <script type="text/javascript">
+        
+            /*global router */
+            
+            var r = document.getElementById('result');
+            
+            var displayResult = function (message) {
+                r.innerHTML = message;
+                console.log(message);
+            };
+            
+            router.base('nevyk/router/workspace/test');
+            
+            router.route('/', function () {
+                displayResult('index');
+            });
+            
+            router.route('/page/:name', function (ctx) {
+                displayResult('page: ' + ctx.params.name);
+            });
+            
+            router.route('/article/:type/:id', function (ctx) {
+                displayResult('article (' + ctx.params.type + '): ' + ctx.params.id);
+            });
+            
+            router.route('/any/*/:action', function (ctx) {
+                displayResult('any: ' + ctx.params.action);
+            });
+            
+            router.route('/optional/:action?', function (ctx) {
+                displayResult('optional: ' + ctx.params.action);
+            });
+            
+            router.route('/user/:id', function (ctx) {
+                displayResult('user: ' + ctx.params.id);
+                
+                if (ctx.params.id !== '3') {
+                    router.go('@401', ctx);
+                }
+            });
+            
+            router.route(function (ctx) {
+                displayResult(ctx.location + ' was not found');
+            });
+            
+            router.route('@401', function () {
+                displayResult('Unauthorized request');
+            });
+            
+        </script>
+    
+    </body>
+</html>
