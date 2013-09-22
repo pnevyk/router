@@ -1,6 +1,6 @@
 # Just another router
 
-Lightweight and simple javascript router using HTML5 History API or hashbangs.
+Lightweight and simple javascript router using HTML5 History API or hashbangs. To see some examples in action, click [here](https://c9.io/nevyk/router/workspace/test/index.html).
 
 IT IS NOT READY TO PRODUCTION USE YET!
 
@@ -86,11 +86,10 @@ router.base('path/to/my/project/folder');
 
 ## Roadmap
 
-- [x] Create providers of routing via HTML5 History API and hashbangs
-- [ ] Add some documentation (comments in the code, API summary, ...)
-- [ ] During initialization, tranform hashbang-like URl to HTML5 mode, if it is supported
-- [ ] Add possibility of defining wildcards like this: '/page:number' -> params.number
-- [ ] Fake support of state and title (as they are defined in HTML5 History APIú in hashbang URLs
+- Add some documentation (comments in the code, API summary, ...)
+- During initialization, tranform hashbang-like URl to HTML5 mode, if it is supported
+- Add possibility of defining wildcards like this: '/page:number' -> params.number
+- Fake support of state and title (as they are defined in HTML5 History APIú in hashbang URLs
 
 ## License
 
