@@ -22,6 +22,7 @@
         <button onclick="router.go('/optional');">optional</button>
         <button onclick="router.go('/user/3');">user/3</button>
         <button onclick="router.go('/user/1');">user/1</button>
+        <button onclick="router.go('/wildcard/subroute');">wildcard/subroute</button>
         <button onclick="router.go('/failure');">failure</button>
         
         <h2 id="result"></h2>
@@ -65,6 +66,14 @@
                 if (ctx.params.id !== '3') {
                     router.go('@401', ctx);
                 }
+            });
+            
+            router.route('/:wildcard', function (ctx) {
+                displayResult('wildcard without subroute');
+            });
+            
+            router.route('/:wildcard/subroute', function (ctx) {
+                displayResult('wildcard with subroute');
             });
             
             router.route(function (ctx) {

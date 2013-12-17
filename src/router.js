@@ -14,7 +14,7 @@
                 opt = {};
             
             levels.forEach(function (level, index) {
-                opt.wildcard = /^\:.*$/.test(level);
+                opt.wildcard = /^\:.+$/.test(level);
                 opt.star = /^\*$/.test(level);
                 opt.optional = /^.+\?/.test(level);
                 iteration(level, opt, index);
@@ -25,11 +25,11 @@
             var output = '^';
             
             iterate(definition, function (level, opt) {
-                if (opt.optional) { output += '(?:[\/](?=.+)'; }
+                if (opt.optional) { output += '(?:[\/](?=[^\/]+)'; }
                 else { output += '\/'; }
                 
-                if (opt.wildcard) { output += '(.+)'; }
-                else if (opt.star) { output += '.+'; }
+                if (opt.wildcard) { output += '([^\/]+)'; }
+                else if (opt.star) { output += '[^\/]+'; }
                 else { output += level; }
                 
                 if (opt.optional) { output += ')?'; }
