@@ -137,7 +137,7 @@
         };
         
         var go = function (path) {
-            win.history.pushState(null, null, prependBase(path));
+            win.history.pushState(null, '', prependBase(path));
             notifyListeners();
         };
         
