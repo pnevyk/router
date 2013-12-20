@@ -89,7 +89,7 @@ router.base('path/to/my/project/folder');
 - Add some documentation (comments in the code, API summary, ...)
 - During initialization, tranform hashbang-like URl to HTML5 mode, if it is supported
 - Add possibility of defining wildcards like this: '/page:number' -> params.number
-- Fake support of state and title (as they are defined in HTML5 History APIú in hashbang URLs
+- Fake support of state and title (as they are defined in HTML5 History API) in hashbang URLs
 
 ## License
 
