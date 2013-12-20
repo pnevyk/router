@@ -22,7 +22,7 @@
         <button onclick="router.go('/optional');">optional</button>
         <button onclick="router.go('/user/3');">user/3</button>
         <button onclick="router.go('/user/1');">user/1</button>
-        <button onclick="router.go('/wildcard/subroute');">wildcard/subroute</button>
+        <button onclick="router.go('/a/wildcard/subroute');">a/wildcard/subroute</button>
         <button onclick="router.go('/failure');">failure</button>
         
         <h2 id="result"></h2>
@@ -68,11 +68,11 @@
                 }
             });
             
-            router.route('/:wildcard', function (ctx) {
+            router.route('/sub/:wildcard', function (ctx) {
                 displayResult('wildcard without subroute');
             });
             
-            router.route('/:wildcard/subroute', function (ctx) {
+            router.route('/sub/:wildcard/subroute', function (ctx) {
                 displayResult('wildcard with subroute');
             });
             

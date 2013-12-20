@@ -1,6 +1,6 @@
 /**
  * @library Router
- * @version 0.1.0
+ * @version 0.1.1
  *
  * @author Petr Nevyhoštěný
  * @license MIT <https://github.com/nevyk/router/blob/master/LICENSE>
@@ -59,8 +59,18 @@
     var HashbangProvider = (function (win) {
         var listeners = [];
         
+        var globalListener = function () {
+            notifyListeners();
+        };
+        
         var init = function () {
             location.hash = location.hash || '/';
+            win.addEventListener('hashchange', globalListener, false);
+        };
+        
+        var stop = function () {
+            win.removeEventListener('hashchange', globalListener);
+            listeners = [];
         };
         
         var notifyListeners = function () {
@@ -70,18 +80,16 @@
         };
         
         var listen = function (callback) {
-            win.addEventListener('hashchange', function () {
-                callback(location.hash.substring(1));
-            }, false);
+            listeners.push(callback);
         };
         
         var go = function (path) {
             win.location.hash = path;
-            notifyListeners();
         };
         
         return {
             init : init,
+            stop : stop,
             listen : listen,
             go : go
         };
@@ -90,9 +98,20 @@
     var HTML5Provider = (function (win) {
         var basePath = '',
             listeners = [];
+            
+        var globalListener = function () {
+            notifyListeners();
+        };
         
         var init = function (base) {
             basePath = base;
+            win.addEventListener('popstate', globalListener, false);
+        };
+        
+        var stop = function () {
+            win.removeEventListener('popstate', globalListener);
+            basePath = '';
+            listeners = [];
         };
         
         var prependBase = function (path) {
@@ -122,12 +141,9 @@
             notifyListeners();
         };
         
-        win.addEventListener('popstate', function () {
-            notifyListeners();
-        }, false);
-        
         return {
             init : init,
+            stop : stop,
             isSupported : isSupported,
             listen : listen,
             go : go
@@ -167,8 +183,8 @@
     var routes = [],
         basePath = '',
         specialRouteRegexp = /^@.+$/;
-    
-    RouterProvider.listen(function (url) {
+        
+    var providerListener = function (url) {
         var regexp,
             paramsArray,
             params = {},
@@ -198,7 +214,7 @@
             Object.freeze(context);
             SpecialRoutes.trigger('404', context);
         }
-    });
+    };
     
     var route = function (definition, callback) {
         if (typeof definition === 'function') {
@@ -231,15 +247,27 @@
         RouterProvider.init(basePath);
     };
     
+    var switchProvider = function () {
+        RouterProvider.stop();
+        
+        RouterProvider = RouterProvider.isSupported === undefined ?
+                             HTML5Provider : HashbangProvider;
+
+        RouterProvider.init(basePath);
+        RouterProvider.listen(providerListener);
+    };
+    
     win.router = {
         route : route,
         go : go,
-        base : base
+        base : base,
+        switchProvider : switchProvider
     };
     
     //wait for finishing routes definition
     win.setTimeout(function () {
         RouterProvider.init(basePath);
+        RouterProvider.listen(providerListener);
     }, 0);
     
 })(window);
